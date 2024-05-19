@@ -1,6 +1,4 @@
-variables:
-  AGENT_USE_NODE20_1: "true"
-  NODE_OPTIONS: "---openssl-legacy-provider"
+
 
 jobs:
 - job: Docker_Build_and_Push
