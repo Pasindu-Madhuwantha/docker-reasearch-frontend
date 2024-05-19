@@ -22,13 +22,18 @@ const Register = () => {
     const register = () => {
         const { name, email, password } = user;
         if (name && email && password) {
-            axios.post('https://cute-piglet-full.ngrok-free.app/Register', user)
-                .then((res) => console.log(res))
-                .catch((error) => console.error(error)); // Add error handling
+            axios.post('https://cute-piglet-full.ngrok-free.app/Register', user, {
+                headers: {
+                    'ngrok-skip-browser-warning': '4567'
+                }
+            })
+            .then((res) => console.log(res))
+            .catch((error) => console.error('Registration failed:', error));
         } else {
-            alert('invalid input');
+            alert('Invalid input');
         }
     };
+    
 
     return (
         <>

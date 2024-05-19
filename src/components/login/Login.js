@@ -20,7 +20,11 @@ const Login = ({ setLoginUser }) => {
 
     const login = () => {
         axios
-            .post('https://cute-piglet-full.ngrok-free.app/Login', user)
+            .post('https://cute-piglet-full.ngrok-free.app/Login', user, {
+                headers: {
+                    'ngrok-skip-browser-warning': '4567'
+                }
+            })
             .then((res) => {
                 alert(res.data.message);
                 setLoginUser(res.data.user);
@@ -30,7 +34,7 @@ const Login = ({ setLoginUser }) => {
                 console.error('Login failed:', error);
             });
     };
-
+    
     return (
         <div className="center-container">
             <div className="login-form">

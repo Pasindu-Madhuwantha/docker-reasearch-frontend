@@ -9,6 +9,14 @@ let isPaused = false;
 let isNewEmotionSet = false;
 let isInitialRun = true;
 
+// Define an Axios instance with a custom configuration
+const axiosInstance = axios.create({
+    baseURL: 'https://cute-piglet-full.ngrok-free.app',
+    headers: {
+        'ngrok-skip-browser-warning': '4567'
+    }
+});
+
 const Homepage = (user) => {
     const history = useHistory();
     const videoRef = useRef();
@@ -91,11 +99,7 @@ const Homepage = (user) => {
                 formData.append('file', imageBlob, 'frame.png');
 
                 try {
-                    const response = await axios.post('https://cute-piglet-full.ngrok-free.app/predict', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    });
+                    const response = await axiosInstance.post('/predict', formData);
 
                     console.log("Sssecon" + " " + isPaused);
                     setCurrentEmotion(response.data[0].emotion);
@@ -155,7 +159,7 @@ const Homepage = (user) => {
 
     const fetchSongs = async (emotion, email) => {
         try {
-            const response = await axios.get(`https://cute-piglet-full.ngrok-free.app/songlist?emotion=${emotion}&email=${email}`);
+            const response = await axiosInstance.get(`/songlist?emotion=${emotion}&email=${email}`);
             const sortedSongs = response.data.sort((a, b) => b.value - a.value); // Sort songs by value (rating)
             setSongs(sortedSongs);
             console.log(sortedSongs);
@@ -173,7 +177,7 @@ const Homepage = (user) => {
         counter = 1; // Reset the counter to 1 when generating a new playlist
         const playlist = songs.map(song => ({
             id: counter++, // Assign the counter value to the id property and then increment the counter
-            src: 'https://cute-piglet-full.ngrok-free.app/songs/' + recognizedEmotion + '/' + song.Name + '.mp3',
+            src: `https://cute-piglet-full.ngrok-free.app/songs/${recognizedEmotion}/${song.Name}.mp3`,
             Name: song.Name,
             Artist: song.Artist,
             emotion: recognizedEmotion,
@@ -219,7 +223,7 @@ const Homepage = (user) => {
 
         // Send a request to update MongoDB database with the song name, emotion, and positive integer value
         try {
-            await axios.post('https://cute-piglet-full.ngrok-free.app/song/played', {
+            await axiosInstance.post('/song/played', {
                 Name: playlist[currentTrack].Name,
                 Artist: playlist[currentTrack].Artist,
                 emotion: recognizedEmotion,
@@ -255,7 +259,7 @@ const Homepage = (user) => {
         console.log("This is on handleNext " + isPaused);
 
         // Send a request to update MongoDB database with the song name, emotion, and positive integer value
-        axios.post('https://cute-piglet-full.ngrok-free.app/song/played', {
+        axiosInstance.post('/song/played', {
             Name: playlist[currentTrack].Name,
             Artist: playlist[currentTrack].Artist,
             emotion: recognizedEmotion,
