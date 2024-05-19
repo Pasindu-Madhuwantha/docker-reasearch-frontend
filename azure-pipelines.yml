@@ -1,5 +1,6 @@
 variables:
   AGENT_USE_NODE20_1: "true"
+  NODE_OPTIONS: "---openssl-legacy-provider"
 
 jobs:
 - job: Docker_Build_and_Push
@@ -15,3 +16,5 @@ jobs:
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       tags: '$(Build.BuildId)'
+    env:
+      NODE_OPTIONS: $(NODE_OPTIONS)
