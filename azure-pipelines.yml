@@ -1,4 +1,6 @@
-# Docker
+variables:
+  AGENT_USE_NODE20_1: "true"
+
 jobs:
 - job: Docker_Build_and_Push
   displayName: 'Build and push Docker image'
